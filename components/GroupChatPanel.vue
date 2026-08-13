@@ -181,8 +181,20 @@ async function doInvite(f: Friend) {
   try {
     await inviteMember(activeGroup.value.id, f.id)
     message.success(`已向 ${f.username} 发送邀请`)
+    // 邀请成功 → 从候选列表移除，避免重复点击
+    friends.value = friends.value.filter((x) => x.id !== f.id)
   } catch (e: unknown) {
-    message.error(apiError(e, '邀请失败'))
+    // 重复邀请 / 已在群中 属于业务提示，用 warning 而非 error 红色报错
+    const code = (e as { statusCode?: number; data?: { statusCode?: number } })?.data?.statusCode
+      ?? (e as { statusCode?: number })?.statusCode
+    const msg = apiError(e, '邀请失败')
+    if (code === 409 || code === 400 || /已发送过|已在群中/.test(msg)) {
+      message.warning(msg)
+      // 重复邀请也移除候选（已发出过，无需再显示）
+      friends.value = friends.value.filter((x) => x.id !== f.id)
+    } else {
+      message.error(msg)
+    }
   }
 }
 
