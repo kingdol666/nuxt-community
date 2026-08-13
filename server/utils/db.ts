@@ -1,6 +1,6 @@
 import { promises as fs } from 'node:fs'
 import { join, dirname } from 'node:path'
-
+import { setTimeout as sleep } from 'node:timers/promises'
 type DataKind = 'categories' | 'content' | 'tags' | 'users' | 'comments' | 'ratings' | 'posts' | 'collections' | 'follows' | 'messages' | 'images' | 'groups' | 'groupInvites'
 
 // Each resource kind maps to a backing file. (`categories` lives in
@@ -72,24 +72,38 @@ async function readJson<T>(file: string): Promise<T> {
 // Write atomically: temp file in the same directory (same filesystem →
 // rename is atomic). Translates permission / read-only errors into a
 // clean HTTP error rather than an uncaught exception.
+// 瞬时占用（Windows 杀软/索引器短暂锁定目标文件导致 rename EPERM/EACCES/EBUSY）
+// 属于可恢复错误：带抖动重试数次，避免并发写入偶发失败丢数据。
 async function writeJson<T>(file: string, data: T): Promise<void> {
   const json = JSON.stringify(data, null, 2)
   const tmp = `${file}.${process.pid}.tmp`
-  try {
-    await fs.mkdir(dirname(file), { recursive: true })
-    await fs.writeFile(tmp, json, 'utf-8')
-    await fs.rename(tmp, file)
-  } catch (e) {
-    await fs.unlink(tmp).catch(() => {})
-    const code = (e as NodeJS.ErrnoException)?.code
-    const readonly =
-      code === 'EROFS' || code === 'EACCES' || code === 'EPERM' || code === 'ENOSPC'
-    throw createError({
-      statusCode: readonly ? 507 : 500,
-      statusMessage: readonly
-        ? '数据目录为只读，无法写入。请设置环境变量 NUXT_DATA_DIR 指向一个可写的持久化目录。'
-        : `写入数据失败：${(e as Error)?.message || String(e)}`,
-    })
+  const RETRYABLE: Record<string, true> = { EPERM: true, EACCES: true, EBUSY: true }
+  const MAX_ATTEMPTS = 4
+  for (let attempt = 1; ; attempt++) {
+    try {
+      await fs.mkdir(dirname(file), { recursive: true })
+      await fs.writeFile(tmp, json, 'utf-8')
+      await fs.rename(tmp, file)
+      return
+    } catch (e) {
+      await fs.unlink(tmp).catch(() => {})
+      const code = (e as NodeJS.ErrnoException)?.code
+      if (RETRYABLE[code!] && attempt < MAX_ATTEMPTS) {
+        // 指数退避 + 随机抖动（20ms ~ 160ms），给外部锁释放窗口
+        await sleep(20 * attempt * (1 + Math.random()))
+        continue
+      }
+      const readonly =
+        code === 'EROFS' || code === 'EACCES' || code === 'EPERM' || code === 'ENOSPC'
+      throw createError({
+        statusCode: readonly ? 507 : 500,
+        statusMessage: readonly
+          ? (code === 'ENOSPC'
+              ? '磁盘空间不足，无法写入数据。'
+              : '数据目录为只读，无法写入。请设置环境变量 NUXT_DATA_DIR 指向一个可写的持久化目录。')
+          : `写入数据失败：${(e as Error)?.message || String(e)}`,
+      })
+    }
   }
 }
 

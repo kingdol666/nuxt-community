@@ -6,6 +6,8 @@ import {
   HomeOutlined,
   AppstoreOutlined,
   DashboardOutlined,
+  MessageOutlined,
+  StarOutlined,
 } from '@ant-design/icons-vue'
 
 const { themeMode } = useTheme()
@@ -19,6 +21,8 @@ const navItems = computed<NavItem[]>(() => {
   const items: NavItem[] = [
     { key: 'home', label: '首页', to: '/', desc: '欢迎页', icon: HomeOutlined },
     { key: 'application', label: '应用推荐', to: '/application', desc: '浏览全部应用', icon: AppstoreOutlined },
+    { key: 'community', label: '社区', to: '/community', desc: '笔记瀑布流', icon: MessageOutlined },
+    { key: 'collections', label: '收藏', to: '/collections', desc: '我的收藏夹', icon: StarOutlined },
   ]
   if (isAdmin.value) items.push({ key: 'admin', label: '后台管理', to: '/admin', desc: '内容 / 分组 / 标签', icon: DashboardOutlined })
   return items
@@ -26,12 +30,14 @@ const navItems = computed<NavItem[]>(() => {
 
 const activeKey = computed(() => {
   const p = route.path
+  if (p.startsWith('/community')) return 'community'
   if (p.startsWith('/application')) return 'application'
+  if (p.startsWith('/collections')) return 'collections'
   if (p.startsWith('/admin')) return 'admin'
   return 'home'
 })
-</script>
 
+</script>
 <template>
   <a-layout-sider
     v-model:collapsed="collapsed"
@@ -167,7 +173,7 @@ const activeKey = computed(() => {
   .sider-item-indicator { height: 22px; }
   .sider-item-icon {
     color: #fff;
-    background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 55%, #8b5cf6));
+    background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 55%, #e8437a));
     border-color: transparent;
     box-shadow: var(--shadow-accent);
   }

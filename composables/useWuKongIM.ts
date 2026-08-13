@@ -103,7 +103,7 @@ export const useWuKongIM = () => {
     if (raw.channelType === 1 && raw.fromUid) {
       for (const handler of privateMsgSubscribers) {
         try {
-          handler({ fromUid: raw.fromUid, payload, timestamp: raw.timestamp || Date.now() })
+          handler({ fromUid: raw.fromUid, payload, timestamp: raw.timestamp ? raw.timestamp * 1000 : Date.now() })
         } catch {
           /* 单个订阅者异常不影响其他 */
         }
@@ -118,7 +118,7 @@ export const useWuKongIM = () => {
       channelId,
       fromUid: raw.fromUid,
       payload,
-      timestamp: raw.timestamp || Date.now(),
+      timestamp: raw.timestamp ? raw.timestamp * 1000 : Date.now(),
     }
     const bucket = { ...channelMessages.value }
     ;(bucket[channelId] ||= []).push(gm)

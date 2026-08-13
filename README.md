@@ -1,11 +1,11 @@
 <div align="center">
 
-<img src="assets/gifs/hero.gif" width="100%" alt="Nuxt Community — Animated Hero" />
+<img src="assets/gifs/hero.gif" width="100%" alt="拾光 Shiguang — Animated Hero" />
 
 <br>
 <br>
 
-# 🌌 Nuxt Community
+# 🌅 拾光 · Shiguang
 
 ### 小红书风格的全栈社区平台 · 博客 / 社交 / 实时通信 / 媒体管理
 

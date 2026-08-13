@@ -58,12 +58,12 @@ import { message } from 'ant-design-vue';
 import { useAuth } from '~/composables/useAuth';
 
 const AVATAR_PALETTE = [
-  ['#6366f1', '#818cf8'],
-  ['#ec4899', '#f9a8d4'],
+  ['#f2633c', '#e8437a'],
+  ['#06b6d4', '#3b82f6'],
   ['#10b981', '#34d399'],
   ['#f59e0b', '#fbbf24'],
-  ['#3b82f6', '#60a5fa'],
-  ['#8b5cf6', '#a78bfa'],
+  ['#e8437a', '#c2410c'],
+  ['#38bdf8', '#0ea5e9'],
 ];
 
 const props = defineProps<{ contentId?: string }>();

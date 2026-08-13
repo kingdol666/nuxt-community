@@ -5,7 +5,7 @@ import WebSocket from 'ws'
 import { readFileSync } from 'node:fs'
 
 const BASE = 'http://localhost:3000'
-const WS_URL = 'ws://localhost:3000/api/_ws'
+const WS_URL = 'ws://localhost:3000/_ws'
 const TS = Date.now()
 
 function tok(p) { const c = readFileSync(p, 'utf8'); const m = c.match(/auth_token\t([^\n]+)/); return m ? m[1].trim() : '' }

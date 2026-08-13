@@ -123,7 +123,7 @@ const particlesOptions = reactive({
 // 3. 创建一个计算属性，根据 themeMode 动态返回 Antd 的主题配置
 // 3. Antd 主题配置 —— 绑定全局设计系统 token(字体 / 主色 / 圆角)
 //    CSS 变量在 assets/css/main.css 定义;这里同步给 antd 组件。
-const FONT_SANS = "'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif";
+const FONT_SANS = "'DM Sans', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif";
 const FONT_MONO = "'JetBrains Mono', 'Fira Code', Consolas, monospace";
 
 const antdTheme = computed(() => {
@@ -133,7 +133,8 @@ const antdTheme = computed(() => {
     token: {
       fontFamily: FONT_SANS,
       fontSize: 14,
-      colorPrimary: dark ? '#818cf8' : '#6366f1',
+      colorPrimary: dark ? '#ff8a5c' : '#e8502a',
+      colorLink: dark ? '#ff8a5c' : '#e8502a',
       borderRadius: 10,
       wireframe: false,
     },
@@ -143,13 +144,13 @@ const antdTheme = computed(() => {
         colorBgBody: 'transparent',
       },
       Menu: {
-        itemSelectedBg: dark ? 'rgba(129,140,248,0.15)' : 'rgba(99,102,241,0.08)',
-        itemSelectedColor: dark ? '#c7d2fe' : '#4f46e5',
+        itemSelectedBg: dark ? 'rgba(255,138,92,0.16)' : 'rgba(232,80,42,0.1)',
+        itemSelectedColor: dark ? '#ffb89a' : '#c2331a',
         itemHoverBg: dark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)',
       },
       Table: {
         headerBg: dark ? '#232330' : '#fafafa',
-        rowHoverBg: dark ? 'rgba(129,140,248,0.06)' : 'rgba(99,102,241,0.04)',
+        rowHoverBg: dark ? 'rgba(255,138,92,0.07)' : 'rgba(232,80,42,0.05)',
       },
       Modal: {
         contentBg: dark ? '#1a1a22' : '#ffffff',

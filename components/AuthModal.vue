@@ -165,7 +165,7 @@ if (typeof window !== 'undefined') {
   display: inline-grid; place-items: center;
   width: 56px; height: 56px; border-radius: 18px;
   font-size: 26px; color: #fff;
-  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 50%, #8b5cf6));
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 50%, #e8437a));
   box-shadow: var(--shadow-accent);
   margin-bottom: 14px;
 }
@@ -189,7 +189,7 @@ if (typeof window !== 'undefined') {
   transition: all var(--dur-fast) var(--ease-out);
   &.active {
     color: #fff;
-    background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 55%, #8b5cf6));
+    background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 55%, #e8437a));
     box-shadow: var(--shadow-sm);
   }
 }
@@ -239,7 +239,7 @@ if (typeof window !== 'undefined') {
   border-radius: var(--radius-md);
   font-family: inherit; font-size: var(--text-md); font-weight: 700;
   color: #fff;
-  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 50%, #8b5cf6));
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 50%, #e8437a));
   box-shadow: var(--shadow-accent);
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   letter-spacing: 0.05em;

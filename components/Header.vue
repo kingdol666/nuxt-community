@@ -62,12 +62,12 @@ async function handleLogout() {
   await logout()
 }
 const AVATAR_GRADIENTS = [
-  'linear-gradient(135deg,#6366f1,#8b5cf6)',
+  'linear-gradient(135deg,#f2633c,#e8437a)',
   'linear-gradient(135deg,#06b6d4,#3b82f6)',
-  'linear-gradient(135deg,#8b5cf6,#ec4899)',
-  'linear-gradient(135deg,#f59e0b,#ef4444)',
   'linear-gradient(135deg,#10b981,#06b6d4)',
-  'linear-gradient(135deg,#3b82f6,#6366f1)',
+  'linear-gradient(135deg,#f59e0b,#ef4444)',
+  'linear-gradient(135deg,#e8437a,#c2410c)',
+  'linear-gradient(135deg,#38bdf8,#0ea5e9)',
 ]
 const avatarStyle = computed(() => {
   if (user.value?.avatarUrl) {
@@ -202,19 +202,21 @@ onBeforeUnmount(() => document.removeEventListener('click', onDocClick))
 
 /* ---- 左侧 ---- */
 .header-left { display: flex; align-items: center; gap: 28px; }
-.brand { display: inline-flex; align-items: center; gap: 11px; text-decoration: none; }
+.brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
 .brand-logo {
-  width: 30px; height: 30px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), inset 0 0 0 1px var(--glass-border-inset);
+  width: 32px; height: 32px;
+  border-radius: 9px;
+  box-shadow: 0 2px 10px var(--accent-glow), inset 0 0 0 1px var(--glass-border-inset);
 }
 .brand-text {
   font-family: var(--font-display);
-  font-size: 19px; font-weight: 700;
-  letter-spacing: -0.01em;
+  font-size: 21px; font-weight: 700;
+  letter-spacing: 0.02em;
   color: var(--text-primary);
   white-space: nowrap;
+  transition: color var(--dur-fast) var(--ease-out);
 }
+.brand:hover .brand-text { color: var(--accent); }
 
 /* ---- 导航胶囊 ---- */
 .nav-pills {
@@ -253,7 +255,7 @@ onBeforeUnmount(() => document.removeEventListener('click', onDocClick))
   border: none; border-radius: var(--radius-full);
   font-family: inherit; font-size: var(--text-sm); font-weight: 600;
   color: #fff;
-  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 55%, #8b5cf6));
+  background: var(--grad-brand);
   box-shadow: var(--shadow-accent);
   transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
   :deep(.anticon) { font-size: 15px; }
@@ -268,8 +270,7 @@ onBeforeUnmount(() => document.removeEventListener('click', onDocClick))
   background: var(--glass-bg-soft);
   color: var(--text-secondary);
   font-size: 17px;
-  transition: all var(--dur-fast) var(--ease-out);
-  &:hover { color: #fadb14; border-color: color-mix(in srgb, #fadb14 40%, transparent); transform: translateY(-1px); }
+  &:hover { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 40%, transparent); transform: translateY(-1px); }
 }
 
 /* ---- 用户菜单 ---- */
@@ -290,8 +291,7 @@ onBeforeUnmount(() => document.removeEventListener('click', onDocClick))
   display: grid; place-items: center;
   width: 28px; height: 28px;
   border-radius: 50%;
-  font-size: 14px; color: #fff;
-  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 50%, #8b5cf6));
+  background: var(--grad-brand);
   overflow: hidden; flex-shrink: 0;
   &.lg { width: 36px; height: 36px; font-size: 17px; }
 }

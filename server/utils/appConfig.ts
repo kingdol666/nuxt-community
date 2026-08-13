@@ -45,7 +45,7 @@ export const DEFAULT_CONFIG: AppConfig = {
   features: { enableSignup: true, enableGuestBrowse: true },
   realtime: { heartbeatIntervalMs: 25000, reconnectDelayMs: 3000 },
   wukongim: { enabled: false, wsURL: 'ws://localhost:5200', apiURL: 'http://localhost:5001', managerToken: '' },
-  branding: { siteTitle: 'Nuxt Community', brandName: 'Nuxt Admin', brandLogo: '/logo.ico' },
+  branding: { siteTitle: '拾光 · 记录此刻,遇见同好', brandName: '拾光', brandLogo: '/logo.svg' },
 }
 
 // 「启动键」路径表 —— 这些键的变更需要重启进程，无法热切换（小而固定的查找表）。

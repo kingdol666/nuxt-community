@@ -87,12 +87,12 @@ function formatTime(ts: number): string {
   return new Date(ts).toLocaleDateString('zh-CN')
 }
 const AVATAR_GRADIENTS = [
-  'linear-gradient(135deg,#6366f1,#8b5cf6)',
+  'linear-gradient(135deg,#f2633c,#e8437a)',
   'linear-gradient(135deg,#06b6d4,#3b82f6)',
-  'linear-gradient(135deg,#8b5cf6,#ec4899)',
-  'linear-gradient(135deg,#f59e0b,#ef4444)',
   'linear-gradient(135deg,#10b981,#06b6d4)',
-  'linear-gradient(135deg,#3b82f6,#6366f1)',
+  'linear-gradient(135deg,#f59e0b,#ef4444)',
+  'linear-gradient(135deg,#e8437a,#c2410c)',
+  'linear-gradient(135deg,#38bdf8,#0ea5e9)',
 ]
 function avatarStyle(color: number) {
   return { background: AVATAR_GRADIENTS[color % AVATAR_GRADIENTS.length] }
@@ -100,12 +100,12 @@ function avatarStyle(color: number) {
 
 // ─────────────────────────── 视觉：渐变方案 ───────────────────────────
 const gradients = [
-  'linear-gradient(135deg,#6366f1,#8b5cf6)',
+  'linear-gradient(135deg,#f2633c,#e8437a)',
   'linear-gradient(135deg,#06b6d4,#3b82f6)',
-  'linear-gradient(135deg,#8b5cf6,#ec4899)',
-  'linear-gradient(135deg,#f59e0b,#ef4444)',
   'linear-gradient(135deg,#10b981,#06b6d4)',
-  'linear-gradient(135deg,#3b82f6,#6366f1)',
+  'linear-gradient(135deg,#f59e0b,#ef4444)',
+  'linear-gradient(135deg,#e8437a,#c2410c)',
+  'linear-gradient(135deg,#38bdf8,#0ea5e9)',
 ]
 const heroGrad = computed(() => {
   const id = props.item?.id || props.item?.name || '0'
@@ -650,7 +650,7 @@ onBeforeUnmount(() => {
   overflow: hidden;
 }
 .visual-favicon { width: 64%; height: 64%; object-fit: contain; }
-.visual-letter { font-size: 54px; font-weight: 800; color: #6366f1; font-family: var(--font-display); }
+.visual-letter { font-size: 54px; font-weight: 800; color: var(--accent); font-family: var(--font-display); }
 .visual-label {
   font-size: var(--text-sm); font-weight: 600; letter-spacing: 0.04em;
   color: rgba(255,255,255,0.85); padding: 4px 14px;
@@ -869,7 +869,7 @@ onBeforeUnmount(() => {
   display: inline-flex; align-items: center; gap: 7px;
   height: 38px; padding: 0 18px; border-radius: var(--radius-full);
   text-decoration: none; font-size: var(--text-sm); font-weight: 600; color: #fff;
-  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 55%, #8b5cf6));
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 55%, #e8437a));
   box-shadow: var(--shadow-accent);
   transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
   :deep(.anticon) { font-size: 13px; transform: rotate(45deg); }

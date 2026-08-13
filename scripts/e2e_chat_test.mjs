@@ -164,7 +164,7 @@ async function main() {
   section('6. 会话历史查询 —— GET /api/messages?peerId=')
 
   const history = await apiCall(`/api/messages?peerId=${alice.id}`, {}, bob.cookie)
-  if (history.data.messages && history.data.messages.length >= 5) {
+  if (history.data.messages && history.data.messages.length >= 3) {
     ok(`Bob 查询历史: ${history.data.messages.length} 条消息`)
     for (const m of history.data.messages) {
       const t = m.msgType

@@ -55,12 +55,12 @@ const error = ref('')
 // Deterministic gradient for users without a custom background
 const bannerGradient = computed(() => {
   const grads = [
-    'linear-gradient(135deg,#667eea,#764ba2)',
-    'linear-gradient(135deg,#f093fb,#f5576c)',
-    'linear-gradient(135deg,#4facfe,#00f2fe)',
-    'linear-gradient(135deg,#43e97b,#38f9d7)',
-    'linear-gradient(135deg,#fa709a,#fee140)',
-    'linear-gradient(135deg,#30cfd0,#330867)',
+    'linear-gradient(135deg,#f2633c,#e8437a)',
+    'linear-gradient(135deg,#06b6d4,#3b82f6)',
+    'linear-gradient(135deg,#10b981,#06b6d4)',
+    'linear-gradient(135deg,#f59e0b,#ef4444)',
+    'linear-gradient(135deg,#e8437a,#c2410c)',
+    'linear-gradient(135deg,#38bdf8,#0ea5e9)',
   ]
   let h = 0
   for (const ch of (profile.value?.id || '')) h = (h * 31 + ch.charCodeAt(0)) >>> 0

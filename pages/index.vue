@@ -15,12 +15,12 @@ import { useMenuStore } from '~/stores/menuStore'
 import {
   ArrowRightOutlined,
   AppstoreOutlined,
-  DashboardOutlined,
+  PictureOutlined,
+  MessageOutlined,
+  StarOutlined,
+  FireOutlined,
   SearchOutlined,
   TagsOutlined,
-  SafetyCertificateOutlined,
-  ThunderboltOutlined,
-  StarFilled,
 } from '@ant-design/icons-vue'
 
 definePageMeta({ title: '首页' })
@@ -31,24 +31,23 @@ const menuStore = useMenuStore()
 const isDark = computed(() => themeMode.value === 'dark')
 
 // ─────────────────────────── 统计（SSR 种子 + 异步刷新） ───────────────────────────
-const contentCount = ref(contentStore.contentItems.length)
-const categoryCount = ref(menuStore.menuItems.length)
+const postCount = ref(0)
+const topicCount = ref(0)
 const tagCount = ref(0)
-const ratingAvg = ref(0)
+const appCount = ref(contentStore.contentItems.length)
 
 async function loadStats() {
   try {
-    const [content, tags] = await Promise.all([
-      $fetch<any[]>('/api/content'),
+    const [posts, topics, tags, content] = await Promise.all([
+      $fetch<any[]>('/api/posts'),
+      $fetch<any[]>('/api/topics'),
       $fetch<any[]>('/api/tags'),
+      $fetch<any[]>('/api/content'),
     ])
-    contentCount.value = Array.isArray(content) ? content.length : contentCount.value
+    postCount.value = Array.isArray(posts) ? posts.length : postCount.value
+    topicCount.value = Array.isArray(topics) ? topics.length : topicCount.value
     tagCount.value = Array.isArray(tags) ? tags.length : tagCount.value
-    categoryCount.value = menuStore.menuItems.length || categoryCount.value
-    if (Array.isArray(content) && content.length) {
-      const avg = content.reduce((s: number, i: any) => s + (Number(i.rating) || 0), 0) / content.length
-      ratingAvg.value = Math.round(avg * 10) / 10
-    }
+    appCount.value = Array.isArray(content) ? content.length : appCount.value
   } catch {
     // 降级：保留 store 种子值
   }
@@ -75,19 +74,20 @@ function useCountUp(source: () => number) {
   }
   return display
 }
-const cCount = useCountUp(() => contentCount.value)
-const catCount = useCountUp(() => categoryCount.value)
+const pCount = useCountUp(() => postCount.value)
+const topCount = useCountUp(() => topicCount.value)
 const tCount = useCountUp(() => tagCount.value)
+const aCount = useCountUp(() => appCount.value)
 
 // 分类预览（取前 8 个）
 const previewCategories = computed(() => menuStore.menuItems.slice(0, 8))
 
 // 特性卡片数据（icon 为已导入的组件引用，模板用 <component :is="..."/> 渲染）
 const features = [
-  { title: '精挑细选', desc: '每一个收录的应用都经过挑选，拒绝信息过载，只留真正实用的工具。', icon: SafetyCertificateOutlined, grad: 'linear-gradient(135deg,#6366f1,#8b5cf6)' },
-  { title: '分组浏览', desc: '按领域归类，从设计、开发到生产力，快速定位你需要的方向。', icon: AppstoreOutlined, grad: 'linear-gradient(135deg,#06b6d4,#3b82f6)' },
-  { title: '标签筛选', desc: '细分标签让你在海量应用中精准命中，几秒找到匹配的工具。', icon: TagsOutlined, grad: 'linear-gradient(135deg,#8b5cf6,#ec4899)' },
-  { title: '可视化后台', desc: '内容、分组、标签三张表完整 CRUD，所见即所得地管理一切。', icon: DashboardOutlined, grad: 'linear-gradient(135deg,#f59e0b,#ef4444)' },
+  { title: '笔记瀑布流', desc: '小红书风格瀑布流,图片 / 视频 / 标签随心混排,记录生活的每一束光。', icon: PictureOutlined, grad: 'linear-gradient(135deg,#ff9a5c,#f2633c)' },
+  { title: '实时私信 · 群聊', desc: 'WuKongIM 双引擎即时通讯,文本 / 图片 / GIF 秒达,离线消息不丢失。', icon: MessageOutlined, grad: 'linear-gradient(135deg,#f2633c,#e8437a)' },
+  { title: '收藏与关注', desc: '多收藏夹整理灵感,关注动态一屏尽览,与同频的人保持连接。', icon: StarOutlined, grad: 'linear-gradient(135deg,#ffc53d,#f59e0b)' },
+  { title: '精选应用', desc: '精挑细选的应用推荐与评分系统,为创作与效率找到下一款利器。', icon: AppstoreOutlined, grad: 'linear-gradient(135deg,#10b981,#0d9488)' },
 ]
 
 // ─────────────────────────── 生成式流场动画 ───────────────────────────
@@ -144,13 +144,13 @@ function palette() {
   if (isDark.value) {
     return {
       fade: 'rgba(15, 15, 22, 0.10)',     // 拖尾衰减：半透明深色覆盖
-      hues: ['#818cf8', '#a5b4fc', '#c084fc', '#22d3ee', '#e879f9'], // 亮色发光粒子
+      hues: ['#ffb25e', '#ff8a5c', '#f2633c', '#e8437a', '#ffd166'], // 霞光发光粒子
       glow: true,
     }
   }
   return {
     fade: 'rgba(255, 255, 255, 0.095)',
-    hues: ['#6366f1', '#4f46e5', '#7c3aed', '#0891b2', '#db2777'],
+    hues: ['#ff8a5c', '#e8502a', '#e8437a', '#f59e0b', '#ffb25e'],
     glow: false,
   }
 }
@@ -313,22 +313,23 @@ onMounted(() => {
       <div class="hero-scrim" />
       <div class="hero-content">
         <span class="badge enter-up" style="--d:0s">
-          <ThunderboltOutlined /> 精选 · 持续更新
+          <img src="/logo.svg" alt="" class="badge-logo" />
+          拾光 · 记录此刻,遇见同好
         </span>
         <h1 class="hero-title enter-up" style="--d:0.08s">
-          发现最好的<br />
-          <span class="grad-text">应用与工具</span>
+          拾起时光<br />
+          <span class="grad-text">遇见同好</span>
         </h1>
         <p class="hero-sub enter-up" style="--d:0.16s">
-          一个精心策划的应用推荐平台 —— 按分组浏览，用标签筛选，<br />
-          快速找到真正值得使用的产品。
+          一个温暖的生活方式社区 —— 记录生活碎片、分享笔记灵感,<br />
+          与同频的人实时畅聊。
         </p>
         <div class="hero-cta enter-up" style="--d:0.24s">
-          <nuxt-link to="/application" class="btn-cta btn-cta-primary">
-            <AppstoreOutlined /> 探索应用推荐 <ArrowRightOutlined />
+          <nuxt-link to="/community" class="btn-cta btn-cta-primary">
+            <PictureOutlined /> 进入社区 <ArrowRightOutlined />
           </nuxt-link>
-          <nuxt-link to="/admin" class="btn-cta btn-cta-ghost">
-            <DashboardOutlined /> 后台管理
+          <nuxt-link to="/application" class="btn-cta btn-cta-ghost">
+            <AppstoreOutlined /> 浏览应用推荐
           </nuxt-link>
         </div>
       </div>
@@ -340,32 +341,32 @@ onMounted(() => {
     <!-- ============ 统计带 ============ -->
     <section class="stats-band reveal">
       <div class="stat-item">
-        <span class="stat-value">{{ cCount }}</span>
-        <span class="stat-name"><AppstoreOutlined /> 精选应用</span>
+        <span class="stat-value">{{ pCount }}</span>
+        <span class="stat-name"><PictureOutlined /> 社区笔记</span>
       </div>
       <span class="stat-divider" />
       <div class="stat-item">
-        <span class="stat-value">{{ catCount }}</span>
-        <span class="stat-name"><TagsOutlined /> 内容分组</span>
+        <span class="stat-value">{{ topCount }}</span>
+        <span class="stat-name"><FireOutlined /> 热门话题</span>
       </div>
       <span class="stat-divider" />
       <div class="stat-item">
         <span class="stat-value">{{ tCount }}</span>
-        <span class="stat-name"><StarFilled /> 预定义标签</span>
+        <span class="stat-name"><TagsOutlined /> 兴趣标签</span>
       </div>
       <span class="stat-divider" />
       <div class="stat-item">
-        <span class="stat-value">{{ ratingAvg }}</span>
-        <span class="stat-name"><StarFilled /> 平均评分</span>
+        <span class="stat-value">{{ aCount }}</span>
+        <span class="stat-name"><AppstoreOutlined /> 精选应用</span>
       </div>
     </section>
 
     <!-- ============ 特性 ============ -->
     <section class="section features-section">
       <header class="section-head reveal">
-        <span class="kicker">为什么选择这里</span>
-        <h2 class="section-title">为发现而生</h2>
-        <p class="section-desc">每一项功能都为了让「找到好工具」这件事更简单、更愉悦。</p>
+        <span class="kicker">为什么是拾光</span>
+        <h2 class="section-title">为记录与连接而生</h2>
+        <p class="section-desc">拾起生活的光,遇见同频的人 —— 每一处细节都为社区体验设计。</p>
       </header>
       <div class="feature-grid">
         <article
@@ -386,9 +387,9 @@ onMounted(() => {
     <!-- ============ 分类预览 ============ -->
     <section class="section categories-section">
       <header class="section-head reveal">
-        <span class="kicker">浏览方向</span>
+        <span class="kicker">发现好应用</span>
         <h2 class="section-title">从你感兴趣的领域开始</h2>
-        <p class="section-desc">涵盖 {{ previewCategories.length }}+ 个分组，点击直达应用推荐。</p>
+        <p class="section-desc">涵盖 {{ previewCategories.length }}+ 个分组,点击直达应用推荐。</p>
       </header>
       <div class="cat-grid reveal">
         <nuxt-link
@@ -409,11 +410,11 @@ onMounted(() => {
     <section class="section cta-section">
       <div class="cta-card surface reveal">
         <div class="cta-text">
-          <h2 class="cta-title">准备好探索了吗？</h2>
-          <p class="cta-desc">立即进入应用推荐，找到属于你的下一款利器。</p>
+          <h2 class="cta-title">准备好拾起时光了吗？</h2>
+          <p class="cta-desc">加入社区,发布你的第一篇笔记,与同好分享生活的每一刻。</p>
         </div>
-        <nuxt-link to="/application" class="btn-cta btn-cta-primary">
-          <SearchOutlined /> 开始探索 <ArrowRightOutlined />
+        <nuxt-link to="/community" class="btn-cta btn-cta-primary">
+          <SearchOutlined /> 开始记录 <ArrowRightOutlined />
         </nuxt-link>
       </div>
     </section>
@@ -480,19 +481,24 @@ onMounted(() => {
   margin-bottom: 26px;
   :deep(.anticon) { color: var(--accent); }
 }
-
 .hero-title {
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(40px, 7vw, 76px);
-  font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -0.025em;
+  font-size: clamp(42px, 7vw, 78px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
   color: var(--text-primary);
   text-shadow: 0 4px 30px rgba(0, 0, 0, 0.25);
 }
+.badge-logo {
+  width: 20px; height: 20px;
+  border-radius: 6px;
+  display: inline-block;
+  vertical-align: -4px;
+}
 .grad-text {
-  background: linear-gradient(120deg, #818cf8, #c084fc 45%, #22d3ee);
+  background: linear-gradient(110deg, #ffc069 5%, #ff7a45 45%, #f0436f 90%);
   -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent; color: transparent;
 }
@@ -518,7 +524,7 @@ onMounted(() => {
 }
 .btn-cta-primary {
   color: #fff;
-  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 55%, #8b5cf6));
+  background: var(--grad-brand);
   box-shadow: var(--shadow-accent);
   &:hover { transform: translateY(-2px); box-shadow: 0 12px 32px var(--accent-glow); }
 }

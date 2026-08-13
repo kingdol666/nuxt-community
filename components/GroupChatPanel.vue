@@ -84,6 +84,22 @@ watch(() => currentMessages.value.length, async () => {
   scrollToBottom()
 })
 
+// 群消息出现未知成员（如刚通过邀请入群）→ 静默刷新群详情补齐成员表
+const triedUnknownMembers = new Set<string>()
+watch(currentMessages, (msgs) => {
+  if (!activeGroup.value || !msgs.length) return
+  const known = new Set(activeGroup.value.members.map((m) => m.id))
+  const me = user.value?.id
+  for (const m of msgs) {
+    if (m.fromUid === me || known.has(m.fromUid)) continue
+    const key = `${activeGroup.value.id}:${m.fromUid}`
+    if (triedUnknownMembers.has(key)) continue
+    triedUnknownMembers.add(key)
+    openGroup(activeGroup.value.id).catch(() => {})
+    return
+  }
+})
+
 // ─── 动作 ───
 function close() { emit('update:open', false) }
 
@@ -472,14 +488,14 @@ function timeFmt(ts: number): string {
   border: none; cursor: pointer; font-size: 12px; padding: 5px 12px;
   border-radius: 8px; display: inline-flex; align-items: center; gap: 4px; transition: all .15s;
 }
-.inv-btn.accept { background: var(--accent, #6366f1); color: #fff; }
+.inv-btn.accept { background: var(--accent, #e8502a); color: #fff; }
 .inv-btn.accept:hover { opacity: .85; }
 .inv-btn.decline { background: var(--glass-bg, rgba(0,0,0,.08)); color: var(--text-secondary); }
 .inv-btn.decline:hover { background: var(--hover-bg); }
 
 .gp-create-btn {
-  width: 100%; border: 1px dashed var(--accent, #6366f1); background: none;
-  color: var(--accent, #6366f1); cursor: pointer; padding: 10px;
+  width: 100%; border: 1px dashed var(--accent, #e8502a); background: none;
+  color: var(--accent, #e8502a); cursor: pointer; padding: 10px;
   border-radius: 12px; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 6px;
   margin-bottom: 12px; transition: all .15s;
 }
@@ -509,7 +525,7 @@ function timeFmt(ts: number): string {
 .form-area { display: flex; flex-direction: column; gap: 12px; padding-top: 20px; }
 .form-label { font-size: 13px; color: var(--text-secondary); }
 .gp-action-btn {
-  background: var(--accent, #6366f1); color: #fff; border: none; cursor: pointer;
+  background: var(--accent, #e8502a); color: #fff; border: none; cursor: pointer;
   padding: 10px; border-radius: 10px; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 6px;
 }
 .gp-action-btn:disabled { opacity: .5; cursor: not-allowed; }
@@ -550,7 +566,7 @@ function timeFmt(ts: number): string {
   background: var(--glass-bg, rgba(255,255,255,.1)); padding: 8px 12px; border-radius: 14px;
   font-size: 14px; color: var(--text-primary); word-break: break-word; line-height: 1.5;
 }
-.gmsg.mine .gmsg-bubble { background: var(--accent, #6366f1); color: #fff; }
+.gmsg.mine .gmsg-bubble { background: var(--accent, #e8502a); color: #fff; }
 
 .chat-input-area { padding-top: 8px; border-top: 1px solid var(--border); }
 .im-status { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
@@ -563,10 +579,10 @@ function timeFmt(ts: number): string {
   display: flex; align-items: center; justify-content: center;
   font-size: 17px; transition: all .15s;
 }
-.tool-btn:hover:not(:disabled) { background: var(--hover-bg); color: var(--accent, #6366f1); }
+.tool-btn:hover:not(:disabled) { background: var(--hover-bg); color: var(--accent, #e8502a); }
 .tool-btn:disabled { opacity: .4; cursor: not-allowed; }
 .send-btn {
-  flex-shrink: 0; padding: 9px 16px; background: var(--accent, #6366f1); color: #fff;
+  flex-shrink: 0; padding: 9px 16px; background: var(--accent, #e8502a); color: #fff;
   border: none; cursor: pointer; border-radius: 10px;
   font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 6px;
 }

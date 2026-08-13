@@ -63,6 +63,6 @@ wukongim:
 
 # ── 品牌外观 ──────────────────────────────────────────────────────────────
 branding:
-  siteTitle: "Nuxt Community"   # [热] 浏览器标签页标题
-  brandName: "Nuxt Admin"       # [热] 导航栏品牌名称
-  brandLogo: "/logo.ico"        # [热] 品牌图标路径
+  siteTitle: "拾光 · 记录此刻,遇见同好"  # [热] 浏览器标签页标题
+  brandName: "拾光"                     # [热] 导航栏品牌名称
+  brandLogo: "/logo.svg"                # [热] 品牌图标路径

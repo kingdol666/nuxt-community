@@ -1229,9 +1229,9 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
  font-size: 24px; color: #fff;
  box-shadow: var(--shadow-sm);
 }
-.stat-icon-indigo { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+.stat-icon-indigo { background: linear-gradient(135deg, #f2633c, #e8437a); }
 .stat-icon-cyan   { background: linear-gradient(135deg, #06b6d4, #3b82f6); }
-.stat-icon-violet { background: linear-gradient(135deg, #8b5cf6, #ec4899); }
+.stat-icon-violet { background: linear-gradient(135deg, #e8437a, #c2410c); }
 .stat-meta { display: flex; flex-direction: column; line-height: 1.1; }
 .stat-num {
   font-family: var(--font-display);
@@ -1282,7 +1282,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
   &:hover { color: var(--text-primary); background: color-mix(in srgb, var(--accent) 6%, transparent); }
   &.active {
     color: #fff;
-    background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 55%, #8b5cf6));
+    background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 55%, #e8437a));
     box-shadow: var(--shadow-accent);
   }
 }

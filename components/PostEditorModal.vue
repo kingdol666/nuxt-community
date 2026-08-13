@@ -43,7 +43,7 @@ const pendingFiles = ref<PendingFile[]>([])
 const selectedCover = ref<'generated' | number>('generated')
 // 主题封面配色
 const gradientPalettes = [
-  { from: '#667eea', to: '#764ba2', name: '紫罗兰' },
+  { from: '#ff9a5c', to: '#f2633c', name: '霞光' },
   { from: '#f093fb', to: '#f5576c', name: '粉色' },
   { from: '#4facfe', to: '#00f2fe', name: '青色' },
   { from: '#43e97b', to: '#38f9d7', name: '绿色' },

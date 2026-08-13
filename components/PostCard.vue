@@ -20,12 +20,12 @@ const videoCover = computed(() => props.post.videos?.[0] || '')
 const mediaCount = computed(() => (props.post.images?.length ?? 0) + (props.post.videos?.length ?? 0))
 const placeholderGrad = computed(() => {
   const grads = [
-    'linear-gradient(135deg,#667eea,#764ba2)',
-    'linear-gradient(135deg,#f093fb,#f5576c)',
-    'linear-gradient(135deg,#4facfe,#00f2fe)',
-    'linear-gradient(135deg,#43e97b,#38f9d7)',
-    'linear-gradient(135deg,#fa709a,#fee140)',
-    'linear-gradient(135deg,#30cfd0,#330867)',
+    'linear-gradient(135deg,#ff9a5c,#f2633c)',
+    'linear-gradient(135deg,#f2633c,#e8437a)',
+    'linear-gradient(135deg,#ffc53d,#f59e0b)',
+    'linear-gradient(135deg,#10b981,#0d9488)',
+    'linear-gradient(135deg,#e8437a,#c2410c)',
+    'linear-gradient(135deg,#38bdf8,#0ea5e9)',
   ]
   let h = 0
   for (const ch of props.post.id) h = (h * 31 + ch.charCodeAt(0)) >>> 0
@@ -159,6 +159,7 @@ const excerpt = computed(() => props.post.content.replace(/\n/g, ' ').slice(0, 6
   padding: 12px 14px 10px;
 }
 .title {
+  font-family: var(--font-display);
   font-size: var(--text-md);
   font-weight: 600;
   line-height: var(--leading-snug);
@@ -169,7 +170,9 @@ const excerpt = computed(() => props.post.content.replace(/\n/g, ' ').slice(0, 6
   line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  transition: color var(--dur-fast) var(--ease-out);
 }
+.post-card:hover .title { color: var(--accent); }
 .excerpt {
   font-size: var(--text-sm);
   color: var(--text-secondary);
